@@ -27,5 +27,8 @@
     "start:backend": "yarn workspace backend start",
     "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
     "setup": "yarn install"
+  },
+  "resolutions": {
+    "three": "0.171.0"
   }
 }
