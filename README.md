@@ -1,7 +1,7 @@
 ## Deployments
   - Frontend => https://matiascarou.github.io/ps-challenge/
   - Backend => https://ps-challenge-backend.vercel.app/
-    - **NOTE**: This is deployed in `vercel` and under a free plan, so endpoints tend to get rate limited
+    - **NOTE**: This is deployed in `vercel` and under a free plan, so endpoints tend to get a lot of timeouts
       - For properly testing use the frontend deployment URL + spinup backend locally as instructed below
 
 ## Testing
