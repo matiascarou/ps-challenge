@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import config from "../config/config.js";
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET } = config;
 
 export const authMiddleware = (
   req: Request,

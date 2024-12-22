@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
-import dotenv from "dotenv";
-dotenv.config();
-
-const { JWT_SECRET, USERNAME, PASSWORD } = process.env;
+const { JWT_SECRET, USERNAME, PASSWORD } = config;
 
 export const authenticateUser = async (req: Request, res: Response) => {
   const { username, password } = req.body;

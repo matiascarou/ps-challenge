@@ -23,12 +23,17 @@
     "backend"
   ],
   "scripts": {
+    "setup": "yarn install",
+    "clean": "rm -rf node_modules */node_modules",
+    "clean-build": "rm -rf frontend/dist backend/dist",
+    "build:frontend": "yarn workspace frontend build",
+    "build:backend": "yarn workspace backend build",
+    "build": "yarn build:frontend && yarn build:backend",
+    "serve:frontend": "vite preview --port 5000 --cwd frontend",
+    "serve:backend": "node backend/dist/server.js",
+    "serve": "concurrently \"yarn serve:frontend\" \"yarn serve:backend\"",
     "start:frontend": "yarn workspace frontend dev",
-    "start:backend": "yarn workspace backend dev",
-    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
-    "setup": "yarn install"
-  },
-  "resolutions": {
-    "three": "0.171.0"
+    "start:backend": "yarn workspace backend vercel-dev",
+    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\""
   }
 }

@@ -13,14 +13,14 @@
     "redis": "^4.7.0"
   },
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node dist/server.js\"",
+    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
+    "vercel-dev": "vercel dev",
     "build": "tsc",
-    "serve": "node dist/server.js"
+    "serve": "node dist/index.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/express-rate-limit": "^6.0.2",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.2",
     "nodemon": "^3.1.9",

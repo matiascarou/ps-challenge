@@ -1,4 +1,7 @@
 import { MIN_CURSOR_VALUE } from "../constants";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import InfoIcon from "@mui/icons-material/Info";
 import "../App.css";
 
 interface IAppHeaderProps {
@@ -16,7 +19,7 @@ export const AppHeader = ({
 }: IAppHeaderProps) => {
   return (
     <div className="appHeader">
-      <div>
+      <div className="inputAndInfoIcon">
         <input
           type="range"
           min={MIN_CURSOR_VALUE}
@@ -25,8 +28,14 @@ export const AppHeader = ({
           onChange={(e) => handleInputChange(e)}
           onFocus={(e) => e.stopPropagation()}
         />
+        <div>
+          <Tooltip title="Hold f + Arrow Keys to Move Between Frames" arrow>
+            <IconButton>
+              <InfoIcon sx={{ color: "white", cursor: "default" }} />
+            </IconButton>
+          </Tooltip>
+        </div>
         <p>Scene: {sceneCursor + 1}</p>
-        <p>Hold f + Arrow Keys to Move</p>
       </div>
       <div>
         <button onClick={handleLogOut}>Logout</button>

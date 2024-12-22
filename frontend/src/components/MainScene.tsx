@@ -17,7 +17,7 @@ interface IMainSceneProps {
 
 export const MainScene = ({ token, setToken }: IMainSceneProps) => {
   const [sceneCursor, setSceneCursor] = useState<number>(0);
-  const [keyedScenes, setKeyedScenes] = useState<
+  const [keyedFrames, setKeyedFrames] = useState<
     Record<number, ISelectedScene>
   >({});
 
@@ -44,9 +44,9 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
    */
   const getSceneData = useCallback(
     async (sceneCursor: number) => {
-      if (!keyedScenes[sceneCursor]) {
+      if (!keyedFrames[sceneCursor]) {
         try {
-          setKeyedScenes((prevState: any) => ({
+          setKeyedFrames((prevState: any) => ({
             ...prevState,
             [sceneCursor]: { data: null, loading: true },
           }));
@@ -64,7 +64,7 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
 
           data.cuboids = mapCuboidsData(data.cuboids);
 
-          setKeyedScenes((prevState: any) => ({
+          setKeyedFrames((prevState: any) => ({
             ...prevState,
             [sceneCursor]: { data, loading: false },
           }));
@@ -81,8 +81,8 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
   }, [sceneCursor, getSceneData]);
 
   const selectedScene = useMemo(() => {
-    return keyedScenes?.[sceneCursor];
-  }, [keyedScenes, sceneCursor]);
+    return keyedFrames?.[sceneCursor];
+  }, [keyedFrames, sceneCursor]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);

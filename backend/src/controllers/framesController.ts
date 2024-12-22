@@ -7,7 +7,7 @@ export const getFrameById = async (req: Request, res: Response) => {
 
     const cursor = frame_id.toString().padStart(2, "0");
 
-    const cacheKey = `${project_name}-${cursor}`;
+    const cacheKey = `${project_name}-frame-${cursor}`;
 
     const redisClient = getRedisClient();
 

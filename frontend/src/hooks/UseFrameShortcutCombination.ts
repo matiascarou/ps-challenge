@@ -21,8 +21,10 @@ const UseFrameShortcutCombination = ({
 
       if (isCombinationKeyPressed) {
         if (event.key === "ArrowLeft") {
+          event.preventDefault();
           setSceneCursor((prev) => Math.max(prev - 1, min));
         } else if (event.key === "ArrowRight") {
+          event.preventDefault();
           setSceneCursor((prev) => Math.min(prev + 1, max - 1));
         }
       }
