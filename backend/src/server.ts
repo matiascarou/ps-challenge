@@ -1,20 +1,32 @@
 import express from "express";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { initRedis } from "./helpers/setupRedisClient.js";
+import authRoutes from "./routes/authRoutes.js";
+import framesRoutes from "./routes/framesRoutes.js";
+import rateLimit from "express-rate-limit";
+
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT ?? 3001;
+(async () => {
+  await initRedis();
 
-app.use(express.json());
+  const app = express();
+  const PORT = process.env.PORT ?? 3001;
 
-// app.post("/auth", auth);
-// app.use("/:project_name/frames", frames);
+  app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "test" });
-});
+  const globalLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 10,
+    message: "Too many requests from this IP, please try again later.",
+  });
 
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
+  app.use(globalLimiter);
+
+  app.use("/", authRoutes);
+  app.use("/", framesRoutes);
+
+  app.listen(PORT, () => {
+    console.log(`Backend running on http://localhost:${PORT}`);
+  });
+})();
