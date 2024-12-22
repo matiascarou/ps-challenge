@@ -1,26 +1,24 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import "../App.css";
-import { TSceneData } from "../types";
+import { ISelectedScene } from "../types";
 import { mapCuboidsData } from "../utils";
-import {
-  MIN_CURSOR_VALUE,
-  MAX_CURSOR_VALUE,
-  PROJECT_NAME,
-  BASE_URL,
-} from "../constants";
+import { MIN_CURSOR_VALUE, PROJECT_NAME } from "../constants";
 import SceneRenderer from "../components/SceneRenderer";
-import { useGetAmountOfFrames } from "../hooks/useGetAmountOfFrames";
+import useGetAmountOfFrames from "../hooks/useGetAmountOfFrames";
+import UseFrameShortcutCombination from "../hooks/UseFrameShortcutCombination";
 import _ from "lodash";
+import { CommunicationService } from "../api/CommunicationService";
+import AppHeader from "./AppHeader";
 
 interface IMainSceneProps {
   token: string;
-  setToken: (token: string | null) => void;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const MainScene = ({ token, setToken }: IMainSceneProps) => {
   const [sceneCursor, setSceneCursor] = useState<number>(0);
   const [keyedScenes, setKeyedScenes] = useState<
-    Record<number, { data: TSceneData | null; loading: boolean }>
+    Record<number, ISelectedScene>
   >({});
 
   const { amountOfFrames, isLoading: isFetchingAmountOfFrames } =
@@ -29,11 +27,21 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
       token,
     });
 
+  UseFrameShortcutCombination({
+    min: MIN_CURSOR_VALUE,
+    max: amountOfFrames,
+    setSceneCursor,
+  });
+
   const handleLogOut = () => {
     localStorage.removeItem("jwtToken");
     setToken(null);
   };
 
+  /*
+   * Get frames data by given cursor
+   * TODO: improve retry policy
+   */
   const getSceneData = useCallback(
     async (sceneCursor: number) => {
       if (!keyedScenes[sceneCursor]) {
@@ -43,13 +51,10 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
             [sceneCursor]: { data: null, loading: true },
           }));
 
-          const res = await fetch(
-            BASE_URL + `${PROJECT_NAME}/frames/${sceneCursor}`,
-            {
-              method: "GET",
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
+          const res = await CommunicationService.getFramesById({
+            sceneCursor,
+            token,
+          });
 
           if (!res.ok) {
             return;
@@ -75,47 +80,31 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
     getSceneData(sceneCursor);
   }, [sceneCursor, getSceneData]);
 
+  const selectedScene = useMemo(() => {
+    return keyedScenes?.[sceneCursor];
+  }, [keyedScenes, sceneCursor]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
 
-    if (value >= MIN_CURSOR_VALUE && value <= MAX_CURSOR_VALUE) {
+    if (value >= MIN_CURSOR_VALUE && value <= amountOfFrames) {
       setSceneCursor(value);
     }
   };
 
-  if (isFetchingAmountOfFrames) {
-    return <div>Getting frames...</div>;
-  }
-
   return (
-    <div
-      style={{ position: "relative", width: "100vw", height: "100vh" }}
-      className="main-scene-container"
-    >
-      <div className="inputRange">
-        <div>
-          <input
-            type="range"
-            min={0}
-            max={amountOfFrames ?? 0}
-            value={sceneCursor}
-            onChange={(e) => handleInputChange(e)}
-            onFocus={(e) => e.stopPropagation()}
-          />
-          <p>Scene: {sceneCursor}</p>
-        </div>
-        <div>
-          <button onClick={handleLogOut} className="input-field">
-            Logout
-          </button>
-        </div>
-      </div>
+    <div className="main-scene-container">
+      <AppHeader
+        amountOfFrames={amountOfFrames}
+        sceneCursor={sceneCursor}
+        handleInputChange={handleInputChange}
+        handleLogOut={handleLogOut}
+      />
 
-      {!!keyedScenes?.[sceneCursor]?.loading && <div>Loading Frame...</div>}
-
-      {!!keyedScenes?.[sceneCursor]?.data && (
-        <SceneRenderer data={keyedScenes[sceneCursor].data} />
-      )}
+      <SceneRenderer
+        selectedScene={selectedScene}
+        isFetchingAmountOfFrames={isFetchingAmountOfFrames}
+      />
     </div>
   );
 };

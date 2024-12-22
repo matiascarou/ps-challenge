@@ -1,17 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
 import { BASE_URL } from "../constants";
+import { CommunicationService } from "../api/CommunicationService";
 
 interface UseAmountOfFramesProps {
   PROJECT_NAME: string;
   token: string | null;
 }
 
-export const useGetAmountOfFrames = ({
+const useGetAmountOfFrames = ({
   PROJECT_NAME,
   token,
 }: UseAmountOfFramesProps) => {
   const [amountOfFrames, setAmountOfFrames] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const getAmountOfScenes = useCallback(async () => {
     if (!token) {
@@ -21,22 +23,16 @@ export const useGetAmountOfFrames = ({
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${BASE_URL}${PROJECT_NAME}/frames`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await CommunicationService.getAmountOfFrames({ token });
 
       if (!res?.ok) {
-        console.error("Failed to fetch frames:", res.status, res.statusText);
         return;
       }
 
       const { amountOfFrames } = await res.json();
       setAmountOfFrames(amountOfFrames);
-    } catch (error) {
-      //
+    } catch (error: any) {
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -49,6 +45,9 @@ export const useGetAmountOfFrames = ({
   return {
     amountOfFrames,
     isLoading,
+    error,
     refetch: getAmountOfScenes,
   };
 };
+
+export default useGetAmountOfFrames;

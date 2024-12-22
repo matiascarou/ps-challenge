@@ -1,14 +1,27 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Points from "./Points";
-import CuboidsTest from "./Cuboids";
-import { TSceneData } from "../types";
+import Cuboids from "./Cuboids";
+import { ISelectedScene } from "../types";
+import "../App.css";
 
-interface ISceneRenderer {
-  data: TSceneData;
+interface ISceneRendererProps {
+  isFetchingAmountOfFrames: boolean;
+  selectedScene: ISelectedScene | null;
 }
 
-const SceneRenderer = ({ data }: ISceneRenderer) => {
+const SceneRenderer = ({
+  selectedScene,
+  isFetchingAmountOfFrames,
+}: ISceneRendererProps) => {
+  if (!selectedScene) {
+    return;
+  }
+
+  if (isFetchingAmountOfFrames || selectedScene.loading) {
+    return <div className="sceneLoader">Loading Data...</div>;
+  }
+
   return (
     <div>
       <Canvas
@@ -26,8 +39,8 @@ const SceneRenderer = ({ data }: ISceneRenderer) => {
           maxDistance={200}
         />
         <ambientLight intensity={0.8} />
-        <CuboidsTest cuboids={data.cuboids} />
-        <Points points={data.points} />
+        <Cuboids cuboids={selectedScene.data.cuboids} />
+        <Points points={selectedScene.data.points} />
       </Canvas>
     </div>
   );

@@ -34,15 +34,7 @@ export interface ICuboid {
   sensorId: number;
 }
 
-// Will go in the server side
-type TRawCuboidPositions = {
-  "position.x": number;
-  "position.y": number;
-  "position.z": number;
-};
-
-type TRawCuboidDimensions = {
-  "dimensions.x": number;
-  "dimensions.y": number;
-  "dimensions.z": number;
-};
+export interface ISelectedScene {
+  loading: boolean;
+  data: TSceneData;
+}

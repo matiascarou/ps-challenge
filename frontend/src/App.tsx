@@ -12,15 +12,11 @@ function App() {
     }
   }, []);
 
-  if (token) {
-    return (
-      <div>
-        <MainScene token={token} setToken={setToken} />
-      </div>
-    );
+  if (!token) {
+    return <LoginForm setToken={setToken} />;
   }
 
-  return <LoginForm setToken={setToken} />;
+  return <MainScene token={token} setToken={setToken} />;
 }
 
 export default App;

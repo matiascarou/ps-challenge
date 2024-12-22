@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 import {
   Matrix4,
   Color,
@@ -26,7 +26,7 @@ const Cuboids = ({ cuboids }: ICuboids) => {
     }
 
     const mesh = meshRef.current;
-    // meshRef.current.layers.set(1); // Attempt to resolve the tooltip
+    // meshRef.current.layers.set(1); // Attempt to resolve the tooltip, but it doesn't seems to work
     const matrices = new Float32Array(cuboids.length * 16);
     const colors = new Float32Array(cuboids.length * 3);
     const tempMatrix = new Matrix4();
@@ -64,7 +64,7 @@ const Cuboids = ({ cuboids }: ICuboids) => {
   }, [cuboids, hoveredIndex]);
 
   /*
-   * TODO: Fix jitter due to layer overlap betweek cuboids and points
+   * TODO: Fix jitter due to layer overlap between cuboids and points
    */
   const handlePointerOut = useCallback(
     _.debounce((e) => {
@@ -97,7 +97,7 @@ const Cuboids = ({ cuboids }: ICuboids) => {
         onPointerOut={handlePointerOut}
         onPointerMove={handlePointerMove}
       >
-        <boxGeometry args={[1, 1, 1]} /> {/* Cuboid geometry */}
+        <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial vertexColors={true} />
       </instancedMesh>
       {!!selectedCuboid && <CuboidMetadata cuboid={selectedCuboid} />}
@@ -105,4 +105,4 @@ const Cuboids = ({ cuboids }: ICuboids) => {
   );
 };
 
-export default Cuboids;
+export default memo(Cuboids);

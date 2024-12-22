@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { BASE_URL } from "../constants";
 import InputComponent from "./InputComponent";
+import { CommunicationService } from "../api/CommunicationService";
 
 interface IMainSceneProps {
-  setToken: (token: string | null) => void;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const LoginForm = ({ setToken }: IMainSceneProps) => {
@@ -13,15 +13,10 @@ const LoginForm = ({ setToken }: IMainSceneProps) => {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
 
-    const authUrl = BASE_URL + "auth";
-
     try {
-      const response = await fetch(authUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await CommunicationService.loginUser({
+        username,
+        password,
       });
 
       if (!response.ok) {
@@ -37,7 +32,6 @@ const LoginForm = ({ setToken }: IMainSceneProps) => {
       localStorage.setItem("jwtToken", receivedToken);
       setToken(receivedToken);
     } catch (error) {
-      console.error("Error logging in:", error);
       alert("Network error or server unavailable.");
     }
   }

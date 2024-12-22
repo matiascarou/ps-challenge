@@ -8,7 +8,7 @@ export async function initRedis() {
   redisClient = createClient();
 
   redisClient.on("error", (err) => {
-    console.error("Redis Client Error", err);
+    console.error("Failed to Initialize Redis Client", err);
   });
 
   await redisClient.connect();

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { Matrix4, Color, InstancedBufferAttribute, InstancedMesh } from "three";
 import _ from "lodash";
 
@@ -17,18 +17,16 @@ const InstancedPoints = ({ points }: IInstancedPoints) => {
     const mesh = meshRef.current;
     // meshRef.current.layers.set(1);
     const matrices = new Float32Array(points.length * 16);
-    const colors = new Float32Array(points.length * 3); // RGB for each point
+    const colors = new Float32Array(points.length * 3);
     const tempMatrix = new Matrix4();
 
-    // Determine the Z range
     const zValues = points.map((point) => point[2]);
 
-    const minZ = _.min(zValues) ?? 0; // Get the minimum value
-    const maxZ = _.max(zValues) ?? 0; // Get the maximum value
+    const minZ = _.min(zValues) ?? 0;
+    const maxZ = _.max(zValues) ?? 0;
 
-    // Define the gradient extremes
-    const colorMin = new Color(1, 1, 1); // White
-    const colorMax = new Color(1, 1, 0); // Red
+    const colorMin = new Color(1, 1, 1);
+    const colorMax = new Color(1, 1, 0);
 
     points.forEach((point, i) => {
       tempMatrix.makeTranslation(point[0], point[1], point[2]);
@@ -36,18 +34,19 @@ const InstancedPoints = ({ points }: IInstancedPoints) => {
 
       const normalizedZ = (point[2] - minZ) / (maxZ - minZ);
 
-      // const color = new Color().setHSL(normalizedZ * 0.7, 1, 0.5); // Hue changes with height
       const color = colorMin.clone().lerp(colorMax, normalizedZ);
-      colors.set(color.toArray(), i * 3); // Set RGB values
+      colors.set(color.toArray(), i * 3);
     });
 
     mesh.instanceMatrix.array.set(matrices);
     mesh.instanceMatrix.needsUpdate = true;
 
-    // Attach colors
+    /*
+     * Set color based on height
+     */
     mesh.geometry.setAttribute(
       "color",
-      new InstancedBufferAttribute(colors, 3) // RGB values
+      new InstancedBufferAttribute(colors, 3)
     );
   }, [points]);
 
@@ -64,4 +63,4 @@ const InstancedPoints = ({ points }: IInstancedPoints) => {
   );
 };
 
-export default InstancedPoints;
+export default memo(InstancedPoints);

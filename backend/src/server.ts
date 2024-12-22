@@ -22,7 +22,7 @@ const { CLIENT_URL = "http://localhost:5173" } = process.env;
 
   const globalLimiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 50,
+    max: 100,
     message: "Too Many Requests From This IP, Please Try Again Later.",
   });
 
@@ -31,7 +31,9 @@ const { CLIENT_URL = "http://localhost:5173" } = process.env;
   app.use("/", authRoutes);
   app.use("/", framesRoutes);
 
+  const URL = "http://localhost:" + PORT;
+
   app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}`);
+    console.log(`Backend running on ${URL}`);
   });
 })();
