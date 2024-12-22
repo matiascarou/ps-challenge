@@ -4,8 +4,11 @@ import { initRedis } from "./helpers/setupRedisClient.js";
 import authRoutes from "./routes/authRoutes.js";
 import framesRoutes from "./routes/framesRoutes.js";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
 
 dotenv.config();
+
+const { CLIENT_URL = "http://localhost:5173" } = process.env;
 
 (async () => {
   await initRedis();
@@ -13,12 +16,14 @@ dotenv.config();
   const app = express();
   const PORT = process.env.PORT ?? 3001;
 
+  app.use(cors({ origin: CLIENT_URL, credentials: true }));
+
   app.use(express.json());
 
   const globalLimiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 10,
-    message: "Too many requests from this IP, please try again later.",
+    max: 50,
+    message: "Too Many Requests From This IP, Please Try Again Later.",
   });
 
   app.use(globalLimiter);

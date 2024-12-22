@@ -21,6 +21,6 @@ export const authenticateUser = async (req: Request, res: Response) => {
     return;
   }
 
-  res.status(401).json({ message: "Invalid username or password" });
+  res.status(401).json({ message: "Invalid Username or Password" });
   return;
 };

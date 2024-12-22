@@ -23,8 +23,8 @@
     "backend"
   ],
   "scripts": {
-    "start:frontend": "yarn workspace frontend start",
-    "start:backend": "yarn workspace backend start",
+    "start:frontend": "yarn workspace frontend dev",
+    "start:backend": "yarn workspace backend dev",
     "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
     "setup": "yarn install"
   },
