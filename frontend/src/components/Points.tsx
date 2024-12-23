@@ -53,11 +53,11 @@ const InstancedPoints = ({ points }: IInstancedPoints) => {
   return (
     <instancedMesh
       ref={meshRef}
-      args={[undefined, undefined, points.length]} // Geometry, material, and count
-      matrixAutoUpdate={false} // Prevent constant updates
-      frustumCulled={true} // Cull objects outside the view
+      args={[undefined, undefined, points.length]}
+      matrixAutoUpdate={false}
+      frustumCulled={true}
     >
-      <sphereGeometry args={[0.1, 4, 4]} />
+      <sphereGeometry args={[0.1, 2, 2]} />
       <meshStandardMaterial vertexColors={true} />
     </instancedMesh>
   );

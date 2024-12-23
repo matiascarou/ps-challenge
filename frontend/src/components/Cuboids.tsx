@@ -98,7 +98,11 @@ const Cuboids = ({ cuboids }: ICuboids) => {
         onPointerMove={handlePointerMove}
       >
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial vertexColors={true} />
+        <meshStandardMaterial
+          vertexColors={true}
+          transparent={true}
+          opacity={0.3}
+        />
       </instancedMesh>
       {!!selectedCuboid && <CuboidMetadata cuboid={selectedCuboid} />}
     </>
