@@ -11,7 +11,7 @@ export const getFrameById = async (req: Request, res: Response) => {
 
     const redisClient = getRedisClient();
 
-    const cachedData = await redisClient.get(cacheKey);
+    const cachedData = (await redisClient?.get(cacheKey)) ?? null;
 
     if (cachedData) {
       const data = JSON.parse(cachedData);
@@ -32,7 +32,7 @@ export const getFrameById = async (req: Request, res: Response) => {
 
     const data = await response.json();
 
-    await redisClient.set(cacheKey, JSON.stringify(data), { EX: 3600 });
+    await redisClient?.set(cacheKey, JSON.stringify(data), { EX: 3600 });
 
     res.status(status).json({ data });
     return;

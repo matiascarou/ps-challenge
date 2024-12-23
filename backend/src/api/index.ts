@@ -4,6 +4,7 @@ import authRoutes from "../routes/authRoutes.js";
 import framesRoutes from "../routes/framesRoutes.js";
 import rateLimit from "express-rate-limit";
 import { setupCors } from "../helpers/setupCors.js";
+import config from "../config/config.js";
 
 const app = express();
 
@@ -25,5 +26,13 @@ app.use(globalLimiter);
 
 app.use("/", authRoutes);
 app.use("/", framesRoutes);
+
+const PORT = config.PORT ?? 3001;
+
+if (process.env.NODE_ENV !== "vercel") {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+}
 
 export default app;

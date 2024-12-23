@@ -13,8 +13,8 @@
     "redis": "^4.7.0"
   },
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
-    "vercel-dev": "vercel dev",
+    "dev": "tsc-watch --onSuccess \"node dist/api/index.js\"",
+    "vercel-dev": "vercel dev --yes",
     "build": "tsc",
     "serve": "node dist/index.js"
   },
