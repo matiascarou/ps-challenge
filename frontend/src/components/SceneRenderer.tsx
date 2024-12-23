@@ -18,8 +18,12 @@ const SceneRenderer = ({
     return;
   }
 
-  if (isFetchingAmountOfFrames || selectedScene.loading) {
-    return <div className="sceneLoader">Loading Data...</div>;
+  if (isFetchingAmountOfFrames) {
+    return <div className="sceneLoader">Getting Available Frames...</div>;
+  }
+
+  if (selectedScene.loading) {
+    return <div className="sceneLoader">Loading Frame...</div>;
   }
 
   return (

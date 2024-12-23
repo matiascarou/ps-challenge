@@ -37,4 +37,5 @@ export interface ICuboid {
 export interface ISelectedScene {
   loading: boolean;
   data: TSceneData;
+  failed: boolean;
 }

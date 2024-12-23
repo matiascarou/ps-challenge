@@ -2,7 +2,7 @@ import { BASE_URL, PROJECT_NAME } from "../constants";
 import { RETRY_POLICY } from "../constants";
 
 interface IGetFramesByIdProps {
-  sceneCursor: number;
+  frameId: number;
   token: string;
 }
 
@@ -46,11 +46,8 @@ const fetchWithRetries = async (url: string, config: RequestInit) => {
  * TODO: add query client
  */
 export class CommunicationService {
-  static getFramesById = async ({
-    sceneCursor,
-    token,
-  }: IGetFramesByIdProps) => {
-    const url = BASE_URL + `${PROJECT_NAME}/frames/${sceneCursor}`;
+  static getFramesById = async ({ frameId, token }: IGetFramesByIdProps) => {
+    const url = BASE_URL + `${PROJECT_NAME}/frames/${frameId}`;
     const config = {
       method: "GET",
       headers: {

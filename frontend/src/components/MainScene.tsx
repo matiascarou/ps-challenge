@@ -40,23 +40,27 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
 
   /*
    * Get frames data by given cursor
-   * TODO: improve retry policy
+   * TODO: improve retry policy + error handling
    */
   const getSceneData = useCallback(
-    async (sceneCursor: number) => {
-      if (!keyedFrames[sceneCursor]) {
+    async (frameId: number) => {
+      if (!keyedFrames[frameId] || keyedFrames?.[frameId]?.failed) {
         try {
           setKeyedFrames((prevState: any) => ({
             ...prevState,
-            [sceneCursor]: { data: null, loading: true },
+            [frameId]: { data: null, loading: true, failed: false },
           }));
 
           const res = await CommunicationService.getFramesById({
-            sceneCursor,
+            frameId,
             token,
           });
 
           if (!res.ok) {
+            setKeyedFrames((prevState: any) => ({
+              ...prevState,
+              [frameId]: { data: null, loading: false, failed: true },
+            }));
             return;
           }
 
@@ -66,14 +70,17 @@ export const MainScene = ({ token, setToken }: IMainSceneProps) => {
 
           setKeyedFrames((prevState: any) => ({
             ...prevState,
-            [sceneCursor]: { data, loading: false },
+            [frameId]: { data, loading: false, failed: false },
           }));
         } catch (error) {
-          //
+          setKeyedFrames((prevState: any) => ({
+            ...prevState,
+            [frameId]: { data: null, loading: false, failed: true },
+          }));
         }
       }
     },
-    [sceneCursor]
+    [sceneCursor, keyedFrames]
   );
 
   useEffect(() => {
