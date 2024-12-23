@@ -1,10 +1,11 @@
 import { Express } from "express";
 import cors from "cors";
-import config from "../config/config.js";
 
-const { CLIENT_URL, DEPLOYMENT_URL } = config;
-
-const allowedOrigins = [CLIENT_URL, DEPLOYMENT_URL];
+// Also available in the env file
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://matiascarou.github.io",
+];
 
 export function setupCors(app: Express) {
   const corsOptions = {
