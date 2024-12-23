@@ -8,9 +8,8 @@
 - Local
   - Clone the repo
   - Paste the `.env` file sent personally in the root of the `backend` folder
-  - In the root directory (`ps-challenge`), run `yarn` or `yarn install`
-    - Run `yanr` 
-    - yarn start
+  - In the root directory (`ps-challenge`), run `yarn` or `yarn setup`
+    - yarn start:dev
       - Will spinup both frontend and backend
     - yarn start:frontend
       - Will spinup only frontend
