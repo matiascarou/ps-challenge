@@ -13,7 +13,7 @@
       - Will spinup both frontend and backend
     - yarn start:frontend
       - Will spinup only frontend
-    - yarn start:backend
-      - Will spinup only backend
+    - yarn start:backend:dev
+      - Will spinup only backend (non-vercel testing)
      
 ## [DEMO](https://scale.zoom.us/clips/share/A2F3MRZJZi0wUDlOclFIaVJEUmpuelpyN2RBAQ)
