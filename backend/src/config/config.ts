@@ -12,6 +12,12 @@ if (process.env.NODE_ENV !== "production") {
 const { PORT, JWT_SECRET, USERNAME, PASSWORD, CLIENT_URL, DEPLOYMENT_URL } =
   process.env;
 
+if (!JWT_SECRET) {
+  throw new Error(
+    "JWT_SECRET must be provided, was the .env file setup correctly?"
+  );
+}
+
 export default {
   PORT,
   JWT_SECRET,
